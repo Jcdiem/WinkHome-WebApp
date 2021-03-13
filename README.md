@@ -1,7 +1,7 @@
 # Wink Home LLC Web Application for Business Management
 Simple web app for managing a small business. Made in my free-time.
 
-This project is not web-facing, and is merely hosted here for showcasing and scrutiny.
+This project is not internet-facing, and is merely hosted here for showcasing and scrutiny.
 
 ## Copying
 Do whatever you want with it, but if you find a security flaw just let me know so I can fix it.
