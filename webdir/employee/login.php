@@ -20,16 +20,9 @@ if(!empty($user)){
     if (!($stmnt = $mysqli->prepare("SELECT * FROM staff WHERE last=? AND INSTR(first,?) AND password=SHA2(?,512)"))) {
         echo "Prepare failed: (";// . $mysqli->errno . ") " . $mysqli->error;
     }
-    if (!$stmnt->bind_param("sss", $lastName, $firstName, $pass)) {
-        echo "Binding parameters failed: (";// . $stmnt->errno . ") " . $stmnt->error;
-    }
-    if (!$stmnt->execute()) {
-        echo "Execute failed: (";// . $stmnt->errno . ") " . $stmnt->error;
-    }
-    if (!$result = $stmnt->get_result()) {
-        echo "Gathering result failed: (";// . $stmnt->errno . ") " . $stmnt->error;
-    }
-    $row = $result->fetch_assoc();
+    if (!$stmnt->bind_param("sss", $lastName, $firstName, $pass)) echo "Binding parameters failed: (";// . $stmnt->errno . ") " . $stmnt->error;
+    if (!$stmnt->execute()) echo "Execute failed: ("; // . $stmnt->errno . ") " . $stmnt->error;
+    if (!$result = $stmnt->get_result()) echo "Gathering result failed: (";// . $stmnt->errno . ") " . $stmnt->error;
 
 // This is what happens when a user successfully authenticates
     if(!empty($row) && $_SESSION['csrf_token'] == $_REQUEST['csrf_token']) {
