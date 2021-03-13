@@ -14,20 +14,20 @@ if(!empty($user)){
     $lastName = substr($user,3);
     $firstName = substr($user, 0, 3);
 
-    $pass = $_REQUEST['pass']; 
+    $pass = $_REQUEST['pass'];
 
     /** @var mysqli $mysqli */
     if (!($stmnt = $mysqli->prepare("SELECT * FROM staff WHERE last=? AND INSTR(first,?) AND password=SHA2(?,512)"))) {
-        echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+        echo "Prepare failed: (";// . $mysqli->errno . ") " . $mysqli->error;
     }
     if (!$stmnt->bind_param("sss", $lastName, $firstName, $pass)) {
-        echo "Binding parameters failed: (" . $stmnt->errno . ") " . $stmnt->error;
+        echo "Binding parameters failed: (";// . $stmnt->errno . ") " . $stmnt->error;
     }
     if (!$stmnt->execute()) {
-        echo "Execute failed: (" . $stmnt->errno . ") " . $stmnt->error;
+        echo "Execute failed: (";// . $stmnt->errno . ") " . $stmnt->error;
     }
     if (!$result = $stmnt->get_result()) {
-        echo "Gathering result failed: (" . $stmnt->errno . ") " . $stmnt->error;
+        echo "Gathering result failed: (";// . $stmnt->errno . ") " . $stmnt->error;
     }
     $row = $result->fetch_assoc();
 
