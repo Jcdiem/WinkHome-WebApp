@@ -6,15 +6,45 @@ try {
 } catch (Exception $e) {
     echo "FATAL ERROR: Please refresh the page and try again";
 }
+?>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wink Home :: Login</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        #loginForm{
+            width: fit-content;
+            margin: auto;
+        .btn-primary {
+            text-align: center;
+            margin: auto;
+        }
+        }
+    </style>
+</head>
+<?php
 
 require_once "db.php";
 
 $user = strtolower($_REQUEST['user']);
 
-if ($_SESSION['user']) {
-    echo "<p>Welcome ";
-    echo htmlspecialchars($_SESSION['user']);
-    echo "</p>";
+if ($_SESSION['user']) {?>
+    <body>
+    <div class="centered-box">
+        <h1 class="text-center font-weight-bold">Already Logged In</h1>
+        <p class="text-center">Logged in as: <?php echo htmlspecialchars($_SESSION['user']); ?></p>
+        <a href="/employee" class="d-block text-center">
+            <button class="btn-success btn-lg">
+                Employee Page
+            </button>
+        </a>
+    </div>
+    <?php
 
     if (!empty($_REQUEST['redirect'])) {
         header("Location: {$_REQUEST['redirect']}");
@@ -50,27 +80,6 @@ if (!empty($user)) {
 
 // Create an else to allow notifying user of wrong info
     } else {?>
-
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Wink Home :: Login</title>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/css/main.css">
-    <style>
-        #loginForm{
-            width: fit-content;
-            margin: auto;
-            .btn-primary {
-                text-align: center;
-                margin: auto;
-            }
-        }
-    </style>
-</head>
 <body>
 <div id="loginForm-Container" class="centered-box">
     <h1 class="font-roboto text-center">Please Login Below</h1>
