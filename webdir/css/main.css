@@ -17,11 +17,7 @@ body{
 }
 
 .centered-box {
-    /*position: absolute;*/
-    /*transform: translateY(-50%);*/
     margin: auto;
-    /*vertical-align: center;*/
-    /*margin-top*/
     border-style: ridge;
     border-radius: 20px;
     background-color: #EEE;
