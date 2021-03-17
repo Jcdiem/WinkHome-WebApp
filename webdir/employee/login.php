@@ -10,6 +10,18 @@ try {
 require_once "db.php";
 
 $user = strtolower($_REQUEST['user']);
+
+if ($_SESSION['user']) {
+    echo "<p>Welcome ";
+    echo htmlspecialchars($_SESSION['user']);
+    echo "</p>";
+
+    if (!empty($_REQUEST['redirect'])) {
+        header("Location: {$_REQUEST['redirect']}");
+    }
+    exit();
+
+} else {
 if (!empty($user)) {
     $lastName = substr($user, 3);
     $firstName = substr($user, 0, 3);
@@ -34,24 +46,8 @@ if (!empty($user)) {
         $_SESSION['user'] = $firstName . $lastName;
 
 
-// This is what happens when the username and/or password doesn't match
-    } else {
-        echo "<p>Incorrect username OR password</p>";
-    }
-}
-
-if ($_SESSION['user']) {
-    echo "<p>Welcome ";
-    echo htmlspecialchars($_SESSION['user']);
-    echo "</p>";
-
-    if (!empty($_REQUEST['redirect'])) {
-        header("Location: {$_REQUEST['redirect']}");
-    }
-    exit();
-
-} else {
-?>
+// Create an else to allow notifying user of wrong info
+    } else {?>
 
 <html lang="en">
 <head>
@@ -76,6 +72,7 @@ if ($_SESSION['user']) {
 <body>
 <div id="loginForm-Container" class="centered-box">
     <h1 class="font-roboto text-center">Please Login Below</h1>
+    <?php echo "<h2 class='invalidServerVal'>Incorrect username OR password</h2>";}} ?>
     <form id="loginForm" method="post" class="border border-info">
         <div id="hiddenGroup" class="form-group">
             <input class="form-control" type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">

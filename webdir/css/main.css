@@ -34,3 +34,9 @@ body{
     display: flex;
     flex-direction: column;
 }
+
+.invalidServerVal {
+    text-align: center;
+    color: red;
+    font-size: 1rem;
+}
