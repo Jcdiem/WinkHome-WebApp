@@ -2,9 +2,9 @@
 session_start();
 //Create CSRF
 try {
-    $_SESSION["csrf_token"] = bin2hex(random_bytes(128));
+    if(empty($_SESSION['csrf_token'])) $_SESSION["csrf_token"] = bin2hex(random_bytes(128));
 } catch (Exception $e) {
-    echo "Error in verification of user security!";
+    echo "FATAL ERROR: Please refresh the page and try again";
 }
 
 require_once "db.php";
@@ -36,12 +36,14 @@ if (!empty($user)) {
     if (!$stmnt->execute()) echo "Execute failed: ("; // . $stmnt->errno . ") " . $stmnt->error;
     if (!$result = $stmnt->get_result()) echo "Gathering result failed: (";// . $stmnt->errno . ") " . $stmnt->error;
 
+    $row = $result -> fetch_assoc();
+
 // This is what happens when a user successfully authenticates
-    if (!empty($row) && $_SESSION['csrf_token'] == $_REQUEST['csrf_token']) {
+    if(!($_SESSION['csrf_token'] == $_REQUEST['csrf_token'])) echo 'FATAL ERROR: Please refresh the page and try again';
+    if(!empty($row)) {
         unset($_SESSION['csrf_token']);
         session_destroy();
         session_start();
-
 
         $_SESSION['user'] = $firstName . $lastName;
 
