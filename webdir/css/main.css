@@ -12,7 +12,11 @@ body{
     display: flex;
 }
 
-.main-info-box {
+.font-roboto{
+    font-family: Roboto, sans-serif;
+}
+
+.centered-box {
     /*position: absolute;*/
     /*transform: translateY(-50%);*/
     margin: auto;
