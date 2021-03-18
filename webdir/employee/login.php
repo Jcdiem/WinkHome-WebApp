@@ -76,6 +76,16 @@ if ($_SESSION['user']) {?>
             <script>
                 $('#loginForm-Container').hide();
             </script>
+    <body>
+    <div id="successBox" class="centered-box">
+        <h1 class="font-roboto text-center">You have been logged in!</h1>
+        <p class="text-center">Logged in as: <?php echo htmlspecialchars($_SESSION['user']); ?></p>
+        <a href="/employee" class="d-block text-center">
+            <button class="btn-success btn-lg">
+                Employee Page
+            </button>
+        </a>
+    </div>
         <?php
         exit();
     }
@@ -85,17 +95,6 @@ if ($_SESSION['user']) {?>
             //Reveal the incorrect info header
             $('#incorrectInfoHeader').show();
         </script>
-        <body>
-        <div id="successBox" class="centered-box">
-            <h1 class="font-roboto text-center">You have been logged in!</h1>
-            <p class="text-center">Logged in as: <?php echo htmlspecialchars($_SESSION['user']); ?></p>
-            <a href="/employee" class="d-block text-center">
-                <button class="btn-success btn-lg">
-                    Employee Page
-                </button>
-            </a>
-        </div>
-        </body>
         <?php
     }
 } ?>
