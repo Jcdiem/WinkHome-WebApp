@@ -7,7 +7,9 @@ This project is not internet-facing, and is merely hosted here for showcasing an
 Do whatever you want with it, but if you find a security flaw just let me know so I can fix it.
 
 ## Security
-If you notice anything that I missed, 
+This code is publicly viewable and open to review, so please feel free to suggest improvements or reccomendations on proper procedure.
+
+
 As long as I can justify it, I plan to keep this project open and a part of my portfiolio.
 
 # Background
