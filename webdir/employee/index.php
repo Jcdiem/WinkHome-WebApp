@@ -6,14 +6,13 @@
     <!--  Tab code and implementation https://inspirationalpixels.com/creating-tabs-with-html-css-and-jquery/  -->
     <meta charset="UTF-8">
     <title>Wink Home :: Employee Page</title>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
+            crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
             integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-            crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-            integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/main.css">
     <style>
@@ -72,13 +71,14 @@
     <div class="row">
         <div id="sidebar" class="col-md-2 bg-light d-none d-md-block sidebar">
             <div class="left-sidebar">
-                <ul class="nav flex-column sidebar-nav">
+                <ul class="nav nav-pills flex-column sidebar-nav">
                     <li class="nav-item active">
                         <a class="nav-link tablinks active" href="#dailyNeedsTab">
                             <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z" clip-rule="evenodd"/></svg>
                             Daily Needs Reporting
                         </a>
                     </li>
+<!--                    -->
                     <li class="nav-item">
                         <a class="nav-link tablinks" href="#dailyReportTab">
                             <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z" clip-rule="evenodd"/></svg>
