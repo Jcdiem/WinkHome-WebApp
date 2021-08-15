@@ -63,7 +63,6 @@ if(isset($_REQUEST['user']) && isset($_REQUEST['pass'])){
         session_start();
     
         $_SESSION['user'] = $firstName . $lastName;
-<<<<<<< HEAD
     
         
     // This is what happens when the username and/or password doesn't match
@@ -90,35 +89,6 @@ if(isset($_SESSION['user'])) { ?>
 } else {
 
 ?>
-=======
-
-        //Success page here?>
-            <script>
-                $('#loginForm-Container').hide();
-            </script>
-    <body>
-    <div id="successBox" class="centered-box">
-        <h1 class="font-roboto text-center">You have been logged in!</h1>
-        <p class="text-center">Logged in as: <?php echo htmlspecialchars($_SESSION['user']); ?></p>
-        <a href="/employee" class="d-block text-center">
-            <button class="btn-success btn-lg">
-                Employee Page
-            </button>
-        </a>
-    </div>
-        <?php
-        exit();
-    }
-    //Else, (if logged in, but bad/no record found)
-    else {?>
-        <script>
-            //Reveal the incorrect info header
-            $('#incorrectInfoHeader').show();
-        </script>
-        <?php
-    }
-} ?>
->>>>>>> c1297fecae2093fc91a73d3fbb07ccb8febfc89c
 
 <body>
 <div id="loginForm-Container" class="centered-box">
