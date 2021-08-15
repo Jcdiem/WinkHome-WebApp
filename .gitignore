@@ -2,3 +2,4 @@
 .idea/
 
 webdir/employee/db.php
+.htpasswd

@@ -2,11 +2,17 @@
 session_start();
 //Create CSRF
 try {
-    if(empty($_SESSION['csrf_token'])) $_SESSION["csrf_token"] = bin2hex(random_bytes(128));
+    if(!isset($_SESSION['csrf_token'])) $_SESSION["csrf_token"] = bin2hex(random_bytes(128));
 } catch (Exception $e) {
     echo "FATAL ERROR: Please refresh the page and try again";
 }
 ?>
+<!-- <pre>
+<?php
+//print_r($_SESSION);
+?>
+</pre> -->
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -29,15 +35,47 @@ try {
 </head>
 <?php
 
-require_once "db.php";
+if(isset($_REQUEST['user']) && isset($_REQUEST['pass'])){
+    unset($_SESSION['csrf_token']);
 
-$user = strtolower($_REQUEST['user']);
 
-if ($_SESSION['user']) {?>
-    <body>
-    <div class="centered-box">
-        <h1 class="text-center font-weight-bold">Already Logged In</h1>
-        <p class="text-center">Logged in as: <?php echo htmlspecialchars($_SESSION['user']); ?></p>
+    $userName = $_REQUEST['user'];
+    $password = $_REQUEST['pass'];
+
+    require_once $_SERVER['DOCUMENT_ROOT']."/employee/db.php";
+
+    /** @var mysqli $mysqli */
+    if (!($stmnt = $mysqli->prepare('SELECT * FROM staff WHERE last=? AND INSTR(first,?) AND password=SHA2(?,512)'))) {
+        echo "Prepare failed: (";// . $mysqli->errno . ") " . $mysqli->error;
+    }
+
+    $lastName = substr($userName, 3);
+    $firstName = substr($userName, 0, 3);
+    
+    if (!$stmnt->bind_param("sss", $lastName, $firstName, $password)) echo "Binding parameters failed: (";// . $stmnt->errno . ") " . $stmnt->error;
+    if (!$stmnt->execute()) echo "Execute failed: ("; // . $stmnt->errno . ") " . $stmnt->error;
+    if (!$result = $stmnt->get_result()) echo "Gathering result failed: (";// . $stmnt->errno . ") " . $stmnt->error;
+
+    $row = mysqli_fetch_assoc($result);
+
+    if(!empty($row) && $_SESSION['csrf_token'] == $_REQUEST['csrf_token']) {        
+        session_destroy();
+        session_start();
+    
+        $_SESSION['user'] = $firstName . $lastName;
+    
+        
+    // This is what happens when the username and/or password doesn't match
+    } else {
+        echo "<p>Incorrect username OR password</p>";
+    }
+}
+
+
+if(isset($_SESSION['user'])) { ?>
+    <div id="goodAuthContainer" class="centered-box">
+        <h1 class="font-roboto text-center">You have been logged in!</h1>
+        <p class="text-center">Logged in as: <?= htmlspecialchars($_SESSION['user']); ?></p>
         <a href="/employee" class="d-block text-center">
             <button class="btn-success btn-lg">
                 Employee Page
@@ -45,60 +83,12 @@ if ($_SESSION['user']) {?>
         </a>
     </div>
     <?php
-    exit();
+	//header("Location: {$_REQUEST['redirect']}");
+	exit();
 
-} else if (!empty($user)) {
-    $lastName = substr($user, 3);
-    $firstName = substr($user, 0, 3);
+} else {
 
-    $pass = $_REQUEST['pass'];
-
-    /** @var mysqli $mysqli */
-    if (!($stmnt = $mysqli->prepare("SELECT * FROM staff WHERE last=? AND INSTR(first,?) AND password=SHA2(?,512)"))) {
-        echo "Prepare failed: (";// . $mysqli->errno . ") " . $mysqli->error;
-    }
-    if (!$stmnt->bind_param("sss", $lastName, $firstName, $pass)) echo "Binding parameters failed: (";// . $stmnt->errno . ") " . $stmnt->error;
-    if (!$stmnt->execute()) echo "Execute failed: ("; // . $stmnt->errno . ") " . $stmnt->error;
-    if (!$result = $stmnt->get_result()) echo "Gathering result failed: (";// . $stmnt->errno . ") " . $stmnt->error;
-
-    $row = $result -> fetch_assoc();
-
-    if(!($_SESSION['csrf_token'] == $_REQUEST['csrf_token'])) echo 'FATAL ERROR: Please refresh the page and try again';
-    // This is what happens when a user successfully authenticates
-    else if(!empty($row)) {
-        unset($_SESSION['csrf_token']);
-        session_destroy();
-        session_start();
-
-        $_SESSION['user'] = $firstName . $lastName;
-
-        //Success page here?>
-            <script>
-                $('#loginForm-Container').hide();
-            </script>
-        <?php
-        exit();
-    }
-    //Else, (if logged in, but bad/no record found)
-    else {?>
-        <script>
-            //Reveal the incorrect info header
-            $('#incorrectInfoHeader').show();
-        </script>
-        <body>
-        <div id="successBox" class="centered-box">
-            <h1 class="font-roboto text-center">You have been logged in!</h1>
-            <p class="text-center">Logged in as: <?php echo htmlspecialchars($_SESSION['user']); ?></p>
-            <a href="/employee" class="d-block text-center">
-                <button class="btn-success btn-lg">
-                    Employee Page
-                </button>
-            </a>
-        </div>
-        </body>
-        <?php
-    }
-} ?>
+?>
 
 <body>
 <div id="loginForm-Container" class="centered-box">
@@ -122,3 +112,4 @@ if ($_SESSION['user']) {?>
 </div>
 </body>
 </html>
+<?php } ?>
