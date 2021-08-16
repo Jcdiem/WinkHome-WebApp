@@ -76,6 +76,7 @@ if(isset($_SESSION['user'])) { ?>
     <div id="goodAuthContainer" class="centered-box">
         <h1 class="font-roboto text-center">You have been logged in!</h1>
         <p class="text-center">Logged in as: <?= htmlspecialchars($_SESSION['user']); ?></p>
+        <p class="text-center">Please click the button below if you are not automatically redirected to the employee page.</p>
         <a href="/employee" class="d-block text-center">
             <button class="btn-success btn-lg">
                 Employee Page
@@ -83,7 +84,7 @@ if(isset($_SESSION['user'])) { ?>
         </a>
     </div>
     <?php
-	//header("Location: {$_REQUEST['redirect']}");
+	header("Location: https://{$_SERVER['SERVER_ADDR']}/employee/index.html");
 	exit();
 
 } else {
