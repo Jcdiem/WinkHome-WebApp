@@ -101,8 +101,8 @@
             </div>
         </div>
         <main role="main" class="tab-content col-md-9 ml-sm-auto col-lg-10 px-4">
-            <div id="dailyNeedsTab" class="tab active">test1</div>
-            <div id="dailyReportTab" class="tab">test2</div>
+            <div id="dailyNeedsTab" class="tab">test1</div>
+            <div id="dailyReportTab" class="tab active">test2</div>
             <div id="activityReportTab" class="tab">test3</div>
             <div id="behaviourReportTab" class="tab">test4</div>
         </main>
@@ -111,14 +111,12 @@
 </body>
 <script>
     $(document).ready(function() {
-        $('.tabs .tablinks a').on('click', function(e) {
+        $('.tablinks').on('click', function(e) {
+            console.debug('Hit nav link');
             let currentAttrValue = $(this).attr('href');
-
-            // Show/Hide Tabs
-            $('.tabs ' + currentAttrValue).show().siblings().hide();
-
-            // Change/remove current tab to active
-            $(this).parent('li').addClass('active').siblings().removeClass('active');
+            $('.active').removeClass('active');
+            $(this).addClass('active');
+            $(currentAttrValue).addClass("active");
 
             e.preventDefault();
         });
