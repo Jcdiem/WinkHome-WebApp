@@ -56,6 +56,13 @@
         .tab.active {
             display:block;
         }
+
+        .submissionField {
+            width: 75%;
+            height: 300px;
+            border: 1px solid #FFFFFF;
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
@@ -101,10 +108,32 @@
             </div>
         </div>
         <main role="main" class="tab-content col-md-9 ml-sm-auto col-lg-10 px-4">
-            <div id="dailyNeedsTab" class="tab">test1</div>
-            <div id="dailyReportTab" class="tab active">test2</div>
-            <div id="activityReportTab" class="tab">test3</div>
-            <div id="behaviourReportTab" class="tab">test4</div>
+            <div id="dailyNeedsTab" class="tab">
+            test1
+            </div>
+            <div id="dailyReportTab" class="tab active">
+            test2
+            </div>
+            <div id="activityReportTab" class="tab">
+            test3
+            </div>
+            <div id="behaviourReportTab" class="tab">
+                <!-- Behavioral Incident Report Form -->
+                <p>This report is to be a factual account of behavioral incidents that occur. <br> 
+                Be factual and objective in your writing when filing this form. <br></p>                
+                <form>
+                    <div class="form-group">
+                        <label for="precipInput">Precipitating Factors: </label>
+                        <input id="precipInput" class="submissionField" type="text" placeholder="Type here...">
+                    </div>
+                    <div class="form-group">
+                        <label for="precipInput">Details of Behavioral Incident: </label>
+                        <p style=""></p>
+                        <input id="precipInput" class="submissionField" type="text" placeholder="Type here...">
+                    </div>
+                </form>
+                <p class="text-danger">By submitting this form, you are entering your above text as an official statement tied to your name.</p>
+            </div>
         </main>
     </div>
 </div>
