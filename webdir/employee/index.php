@@ -2,12 +2,34 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . "/employee/force_login.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/employee/db.php";
 
+function debug_to_console($data) {
+    $output = $data;
+    if (is_array($output))
+        $output = implode(',', $output);
+
+    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
+}
+
+
 /** @var $mysqli */
-if (!($stmnt = $mysqli->prepare('SELECT * FROM client'))) {
+if (!($stmnt = $mysqli->prepare('SELECT * FROM client ORDER BY last ASC'))) {
     echo "Prepare failed";//: (" . $mysqli->errno . ") " . $mysqli->error;
 }
 if (!$stmnt->execute()) echo "Execute failed";// : (" . $stmnt->errno . ") " . $stmnt->error;
 if (!$result = $stmnt->get_result()) echo "Gathering result failed"; //: (" . $stmnt->errno . ") " . $stmnt->error;
+
+
+$htmlString = "<p><b>Pick a client</b></p>";
+for ($i = 0; $i < $result->num_rows; $i++) {
+    if (!$row = $result->fetch_assoc()) {
+        die("Gathering row failed");//: (" . $stmnt->errno . ") " . $stmnt->error);
+    }
+    $tmpString = '<label for="clientInput' . $row["clientID"] . '" class="text-secondary">' . $row["last"] . ', ' . $row["first"] . '</label>';
+    $tmpString .= '<input type="radio" name="clientRadio" id="clientInput' . $row["clientID"] . '"><br>';
+//    debug_to_console($tmpString);
+    $htmlString .= $tmpString;
+}
+echo('<script>const clientRadHtml = \'' . $htmlString . ' \';</script>');
 
 ?>
 
@@ -217,20 +239,8 @@ if (!$result = $stmnt->get_result()) echo "Gathering result failed"; //: (" . $s
 
 
         //Create client radio menus
-        <?php
-        $htmlString = "<p><b>Pick a client</b></p>";
-        for($i = 0; $i <= $result->num_rows; $i++){
-            if(!$row = $result->fetch_assoc()){
-                echo "Gathering row failed: (" . $stmnt->errno . ") " . $stmnt->error;
-                exit();
-            }
-            $tmpString = '<label for="clientInput' . $row["clientID"] . '">' . $row["first"] . ' ' . $row["last"] . '</label>';
-            $tmpString .= '<input type="radio" name="clientRadio" id="clientInput' . $row["clientID"] . '">';
-            $htmlString .= $tmpString;
-        }
-        ?>
-        console.log(<?php echo $htmlString ?>);
-        $('.clientList').html("" . <?php echo $htmlString ?> );
+        console.error("feg");
+        $('.clientList').html(clientRadHtml);
 
         //Code segment for tab links
         $('.tablinks').on('click', function(e) {
