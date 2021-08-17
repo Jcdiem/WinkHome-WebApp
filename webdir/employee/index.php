@@ -1,12 +1,22 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . "/employee/force_login.php" ?>
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . "/employee/force_login.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/employee/db.php";
+
+/** @var $mysqli */
+if (!($stmnt = $mysqli->prepare('SELECT * FROM client'))) {
+    echo "Prepare failed";//: (" . $mysqli->errno . ") " . $mysqli->error;
+}
+if (!$stmnt->execute()) echo "Execute failed";// : (" . $stmnt->errno . ") " . $stmnt->error;
+if (!$result = $stmnt->get_result()) echo "Gathering result failed"; //: (" . $stmnt->errno . ") " . $stmnt->error;
+
+?>
 
 <html lang="en">
 <head>
     <!--  Template for the dashboard courtesy of https://www.blog.duomly.com/bootstrap-tutorial/  -->
-    <!--  Tab code and implementation https://inspirationalpixels.com/creating-tabs-with-html-css-and-jquery/  -->
     <meta charset="UTF-8">
     <title>Wink Home :: Employee Page</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"
             integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -15,6 +25,7 @@
             integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/main.css">
+    <script src="../js/util.js"></script>
     <style>
         main {
             padding-top: 90px;
@@ -115,6 +126,10 @@
             <div id="dailyNeedsTab" class="tab active">
 <!--            Client Completion of Daily Schedule Report-->
                 <form>
+                    <div class="form-group clientList">
+                        <!--TODO: Populate with client names-->
+                        An error has occurred
+                    </div>
                     <div class="form-group">
                         <label for="dateInput">Date:  </label>
                         <input type="date" id="dateInput">
@@ -137,11 +152,9 @@
             <div id="activityReportTab" class="tab">
 <!--                Client activity log-->
                 <form>
-                    <div class="form-group">
-                        <label for="clientInput">Client: </label>
-                        <br>
+                    <div class="form-group clientList">
                         <!--TODO: Populate with client names-->
-                        <input type="radio" id="clientInput">
+                        An error has occurred
                     </div>
                     <div class="form-group">
                         <label for="eventInput">What did the client do today? (Activities)</label>
@@ -153,14 +166,12 @@
             </div>
             <div id="behaviourReportTab" class="tab">
                 <!-- Behavioral Incident Report Form -->
-                <p>This report is to be a factual account of behavioral incidents that occur. <br> 
-                Be factual and objective in your writing when filing this form. <br></p>                
+                <h5 class="text-info">This report is to be a factual account of behavioral incidents that occur.
+                Be factual and objective in your writing when filing this form.</h5>
                 <form>
-                    <div class="form-group">
+                    <div class="form-group clientList">
                         <!--TODO: Populate with client names-->
-                        <label for="clientInput">Client: </label>
-                        <br>
-                        <input type="radio" id="clientInput">
+                        An error has occurred
                     </div>
                     <div class="form-group">
                         <label for="precipInput">Precipitating Factors: </label>
@@ -202,10 +213,30 @@
 </div>
 </body>
 <script>
+
     $(document).ready(function() {
+
+
+        //Create client radio menus
+        <?php
+        $htmlString = "<p><b>Pick a client</b></p>";
+        for($i = 1; $i <= $result->num_rows; $i++){
+            if(!$row = $result->fetch_assoc()){
+                echo "Gathering row failed: (" . $stmnt->errno . ") " . $stmnt->error;
+                exit();
+            }
+            print_r($row);
+            $tmpString = '<label for="clientInput' . $row["clientID"] . '">' . $row["first"] . ' ' . $row["last"] . '</label>';
+            $tmpString .= '<input type="radio" name="clientRadio" id="clientInput' . $row["clientID"] . '">';
+            $htmlString .= $tmpString;
+        }
+        ?>
+        $('.clientList').html(<?= $htmlString ?>);
+
+        //Code segment for tab links
         $('.tablinks').on('click', function(e) {
-            console.debug('Hit nav link');
-            let currentAttrValue = $(this).attr('href');
+            //console.debug('Hit nav link');
+            const currentAttrValue = $(this).attr('href');
             $('.active').removeClass('active');
             $(this).addClass('active');
             $(currentAttrValue).addClass("active");
