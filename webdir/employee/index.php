@@ -63,6 +63,10 @@
             border: 1px solid #555555;
             padding: 5px;
         }
+        textarea {
+            resize: none;
+        }
+
     </style>
 </head>
 <body>
@@ -128,10 +132,24 @@
 <!--            TODO: Load in from a schedule -->
             </div>
             <div id="dailyReportTab" class="tab">
-            test2
+<!--                -->
             </div>
             <div id="activityReportTab" class="tab">
-            test3
+<!--                Client activity log-->
+                <form>
+                    <div class="form-group">
+                        <label for="clientInput">Client: </label>
+                        <br>
+                        <!--TODO: Populate with client names-->
+                        <input type="radio" id="clientInput">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventInput">What did the client do today? (Activities)</label>
+                        <br>
+                        <textarea id="eventInput" class="submissionField"></textarea>
+                    </div>
+                    <input type="submit">
+                </form>
             </div>
             <div id="behaviourReportTab" class="tab">
                 <!-- Behavioral Incident Report Form -->
@@ -139,6 +157,7 @@
                 Be factual and objective in your writing when filing this form. <br></p>                
                 <form>
                     <div class="form-group">
+                        <!--TODO: Populate with client names-->
                         <label for="clientInput">Client: </label>
                         <br>
                         <input type="radio" id="clientInput">
@@ -196,5 +215,3 @@
     });
 </script>
 </html>
-
-
