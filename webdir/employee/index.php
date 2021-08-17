@@ -60,7 +60,7 @@
         .submissionField {
             width: 75%;
             height: 300px;
-            border: 1px solid #FFFFFF;
+            border: 1px solid #555555;
             padding: 5px;
         }
     </style>
@@ -123,16 +123,45 @@
                 Be factual and objective in your writing when filing this form. <br></p>                
                 <form>
                     <div class="form-group">
-                        <label for="precipInput">Precipitating Factors: </label>
-                        <input id="precipInput" class="submissionField" type="text" placeholder="Type here...">
+                        <label for="clientInput">Client: </label>
+                        <br>
+                        <input type="radio" id="clientInput">
                     </div>
                     <div class="form-group">
-                        <label for="precipInput">Details of Behavioral Incident: </label>
-                        <p style=""></p>
-                        <input id="precipInput" class="submissionField" type="text" placeholder="Type here...">
+                        <label for="precipInput">Precipitating Factors: </label>
+                        <br>
+                        <textarea id="precipInput" class="submissionField"></textarea>
                     </div>
+                    <div class="form-group">
+                        <label for="incidentInput">Details of Behavioral Incident: </label>
+                        <br>
+                        <p style="font-size: 0.75rem">Please include details of what intervention was used, and how the client responded.</p>
+                        <textarea id="precipInput" class="submissionField"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="notesInput">Details From Follow-Up Meeting</label>
+                        <br>
+                        <textarea id="notesInput" class="submissionField"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="reflectInput">How will this change assisting the client? (Self Reflection)</label>
+                        <br>
+                        <textarea id="reflectInput" class="submissionField"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="damagesInput">Physical Injuries and Damages: </label>
+                        <br>
+                        <textarea id="damagesInput" class="submissionField"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="witnessInput">Witnesses</label>
+                        <br>
+                        <input type="text" id="witnessInput" placeholder="John Doe, Jane Doe, etc...">
+                    </div>
+                    <p class="text-danger">By submitting this form, you are entering your above text as an official statement tied to your name.</p>
+                    <input type="submit">
                 </form>
-                <p class="text-danger">By submitting this form, you are entering your above text as an official statement tied to your name.</p>
+
             </div>
         </main>
     </div>
