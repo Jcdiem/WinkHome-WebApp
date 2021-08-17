@@ -108,10 +108,26 @@
             </div>
         </div>
         <main role="main" class="tab-content col-md-9 ml-sm-auto col-lg-10 px-4">
-            <div id="dailyNeedsTab" class="tab">
-            test1
+            <div id="dailyNeedsTab" class="tab active">
+<!--            Client Completion of Daily Schedule Report-->
+                <form>
+                    <div class="form-group">
+                        <label for="dateInput">Date:  </label>
+                        <input type="date" id="dateInput">
+                    </div>
+                    <div class="form-group">
+                        <label for="wakeupInput">Wake up time: </label>
+                        <input type="time" id="wakeupInput">
+                    </div>
+                    <div class="form-group">
+                        <label for="sleepInput">Bed time: </label>
+                        <input type="time" id="sleepInput">
+                    </div>
+                    <input type="submit">
+                </form>
+<!--            TODO: Load in from a schedule -->
             </div>
-            <div id="dailyReportTab" class="tab active">
+            <div id="dailyReportTab" class="tab">
             test2
             </div>
             <div id="activityReportTab" class="tab">
@@ -161,7 +177,6 @@
                     <p class="text-danger">By submitting this form, you are entering your above text as an official statement tied to your name.</p>
                     <input type="submit">
                 </form>
-
             </div>
         </main>
     </div>
