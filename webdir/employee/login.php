@@ -36,7 +36,6 @@ try {
 <?php
 
 if(isset($_REQUEST['user']) && isset($_REQUEST['pass'])){
-    unset($_SESSION['csrf_token']);
 
 
     $userName = $_REQUEST['user'];
@@ -58,7 +57,8 @@ if(isset($_REQUEST['user']) && isset($_REQUEST['pass'])){
 
     $row = mysqli_fetch_assoc($result);
 
-    if(!empty($row) && $_SESSION['csrf_token'] == $_REQUEST['csrf_token']) {        
+    if(!empty($row) && $_SESSION['csrf_token'] == $_REQUEST['csrf_token']) {
+        unset($_SESSION['csrf_token']);
         session_destroy();
         session_start();
     
@@ -67,6 +67,7 @@ if(isset($_REQUEST['user']) && isset($_REQUEST['pass'])){
         
     // This is what happens when the username and/or password doesn't match
     } else {
+        unset($_SESSION['csrf_token']);
         echo "<p>Incorrect username OR password</p>";
     }
 }
