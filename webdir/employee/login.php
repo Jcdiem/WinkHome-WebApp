@@ -37,13 +37,12 @@ try {
 
 if(isset($_REQUEST['user']) && isset($_REQUEST['pass'])){
 
-
     $userName = $_REQUEST['user'];
     $password = $_REQUEST['pass'];
 
     require_once $_SERVER['DOCUMENT_ROOT']."/employee/db.php";
 
-    /** @var mysqli $mysqli */
+    /** @var $mysqli */
     if (!($stmnt = $mysqli->prepare('SELECT * FROM staff WHERE last=? AND INSTR(first,?) AND password=SHA2(?,512)'))) {
         echo "Prepare failed: (";// . $mysqli->errno . ") " . $mysqli->error;
     }
@@ -84,9 +83,7 @@ if(isset($_SESSION['user'])) { ?>
             </button>
         </a>
     </div>
-    <?php
-	header("Location: https://{$_SERVER['SERVER_ADDR']}/employee/index.html");
-	exit();
+<?php
 
 } else {
 
