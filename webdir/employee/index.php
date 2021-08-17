@@ -12,7 +12,7 @@ function debug_to_console($data) {
 
 
 /** @var $mysqli */
-if (!($stmnt = $mysqli->prepare('SELECT * FROM client ORDER BY last ASC'))) {
+if (!($stmnt = $mysqli->prepare('SELECT * FROM client ORDER BY last'))) {
     echo "Prepare failed";//: (" . $mysqli->errno . ") " . $mysqli->error;
 }
 if (!$stmnt->execute()) echo "Execute failed";// : (" . $stmnt->errno . ") " . $stmnt->error;
