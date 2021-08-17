@@ -25,7 +25,6 @@ if (!$result = $stmnt->get_result()) echo "Gathering result failed"; //: (" . $s
             integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/main.css">
-    <script src="../js/util.js"></script>
     <style>
         main {
             padding-top: 90px;
@@ -220,18 +219,18 @@ if (!$result = $stmnt->get_result()) echo "Gathering result failed"; //: (" . $s
         //Create client radio menus
         <?php
         $htmlString = "<p><b>Pick a client</b></p>";
-        for($i = 1; $i <= $result->num_rows; $i++){
+        for($i = 0; $i <= $result->num_rows; $i++){
             if(!$row = $result->fetch_assoc()){
                 echo "Gathering row failed: (" . $stmnt->errno . ") " . $stmnt->error;
                 exit();
             }
-            print_r($row);
             $tmpString = '<label for="clientInput' . $row["clientID"] . '">' . $row["first"] . ' ' . $row["last"] . '</label>';
             $tmpString .= '<input type="radio" name="clientRadio" id="clientInput' . $row["clientID"] . '">';
             $htmlString .= $tmpString;
         }
         ?>
-        $('.clientList').html(<?= $htmlString ?>);
+        console.log(<?php echo $htmlString ?>);
+        $('.clientList').html("" . <?php echo $htmlString ?> );
 
         //Code segment for tab links
         $('.tablinks').on('click', function(e) {
