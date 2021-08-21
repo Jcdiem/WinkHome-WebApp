@@ -61,7 +61,7 @@ if(isset($_REQUEST['user']) && isset($_REQUEST['pass'])){
         session_destroy();
         session_start();
     
-        $_SESSION['user'] = $firstName . $lastName;
+        $_SESSION['user'] = $firstName . "." . $lastName;
     
         
     // This is what happens when the username and/or password doesn't match

@@ -12,25 +12,43 @@ function debug_to_console($data) {
 
 
 /** @var $mysqli */
+// Create the radio menu for client selection
 if (!($stmnt = $mysqli->prepare('SELECT * FROM client ORDER BY last'))) {
     echo "Prepare failed";//: (" . $mysqli->errno . ") " . $mysqli->error;
 }
 if (!$stmnt->execute()) echo "Execute failed";// : (" . $stmnt->errno . ") " . $stmnt->error;
 if (!$result = $stmnt->get_result()) echo "Gathering result failed"; //: (" . $stmnt->errno . ") " . $stmnt->error;
-
-
-$htmlString = "<p><b>Pick a client</b></p>";
+$clientHtmlString = "<p><b>Pick a client</b></p>";
 for ($i = 0; $i < $result->num_rows; $i++) {
     if (!$row = $result->fetch_assoc()) {
         die("Gathering row failed");//: (" . $stmnt->errno . ") " . $stmnt->error);
     }
     $tmpString = '<label for="clientInput' . $row["clientID"] . '" class="text-secondary">' . $row["last"] . ', ' . $row["first"] . '</label>';
-    $tmpString .= '<input type="radio" name="clientRadio" id="clientInput' . $row["clientID"] . '"><br>';
+    $tmpString .= '<input required type="radio" name="clientRadio" id="clientInput' . $row["clientID"] . '" value="' . $row["clientID"] . '"><br>';
 //    debug_to_console($tmpString);
-    $htmlString .= $tmpString;
+    $clientHtmlString .= $tmpString;
 }
-echo('<script>const clientRadHtml = \'' . $htmlString . ' \';</script>');
 
+//Create the radio menu for activity type
+if (!($stmnt = $mysqli->prepare('SELECT * FROM activityCode'))) {
+    echo "Prepare failed";//: (" . $mysqli->errno . ") " . $mysqli->error;
+}
+if (!$stmnt->execute()) echo "Execute failed";// : (" . $stmnt->errno . ") " . $stmnt->error;
+if (!$result = $stmnt->get_result()) echo "Gathering result failed"; //: (" . $stmnt->errno . ") " . $stmnt->error;
+
+$activityHtmlString = "<p><b>Activity type</b></p>";
+for ($i = 0; $i < $result->num_rows; $i++) {
+    if (!$row = $result->fetch_assoc()) {
+        die("Gathering row failed");//: (" . $stmnt->errno . ") " . $stmnt->error);
+    }
+    $tmpString = '<label for="activityCodeInput' . $row["activityTypeID"] . '" class="text-secondary">' . $row["description"] . '</label>';
+    $tmpString .= '<input required type="radio" name="activityCodeRadio" id="activityCodeInput' . $row["activityTypeID"] . '" value="' . $row["activityTypeID"] . '"><br>';
+//    debug_to_console($tmpString);
+    $activityHtmlString .= $tmpString;
+
+}
+echo('<script>const clientRadHtml = \'' . $clientHtmlString . ' \';</script>');
+echo('<script>const activityCodeRadHtml = \'' . $activityHtmlString . ' \';</script>');
 ?>
 
 <html lang="en">
@@ -146,22 +164,24 @@ echo('<script>const clientRadHtml = \'' . $htmlString . ' \';</script>');
         <main role="main" class="tab-content col-md-9 ml-sm-auto col-lg-10 px-4">
             <div id="dailyNeedsTab" class="tab active">
 <!--            Client Completion of Daily Schedule Report-->
-                <form>
+                <form id="dailyNeedsForm" action="submitReport.php" method="post">
+                    <div class="form-group">
+                        <input class="form-control" type="hidden" name="formType" value="dailyNeeds">
+                    </div>
                     <div class="form-group clientList">
-                        <!--TODO: Populate with client names-->
                         An error has occurred
                     </div>
                     <div class="form-group">
-                        <label for="dateInput">Date:  </label>
-                        <input type="date" id="dateInput">
+                        <label for="dayneedsDateInput">Date:  </label>
+                        <input type="date" id="dayneedsDateInput">
                     </div>
                     <div class="form-group">
-                        <label for="wakeupInput">Wake up time: </label>
-                        <input type="time" id="wakeupInput">
+                        <label for="dayneedsWakeupInput">Wake up time: </label>
+                        <input type="time" id="dayneedsWakeupInput">
                     </div>
                     <div class="form-group">
-                        <label for="sleepInput">Bed time: </label>
-                        <input type="time" id="sleepInput">
+                        <label for="dayneedsSleepInput">Bed time: </label>
+                        <input type="time" id="dayneedsSleepInput">
                     </div>
                     <input type="submit">
                 </form>
@@ -169,27 +189,37 @@ echo('<script>const clientRadHtml = \'' . $htmlString . ' \';</script>');
             </div>
             <div id="dailyReportTab" class="tab">
 <!--                -->
-            </div>
-            <div id="activityReportTab" class="tab">
-<!--                Client activity log-->
-                <form>
+                <!--         Client activity log           -->
+                <form id="dailyReportForm" action="submitReport.php" method="post">
+                    <div class="form-group">
+                        <input class="form-control" type="hidden" name="formType" value="dailyReport">
+                    </div>
                     <div class="form-group clientList">
-                        <!--TODO: Populate with client names-->
-                        An error has occurred
+                        An error has occurred - client list not populated
                     </div>
                     <div class="form-group">
-                        <label for="eventInput">What did the client do today? (Activities)</label>
+                        <label for="activityDateInput">Date:  </label>
+                        <input required type="date" id="activityDateInput" name="activityDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="activityEventInput">What did the client do? (Key notes of day)</label>
                         <br>
-                        <textarea id="eventInput" class="submissionField"></textarea>
+                        <textarea id="activityEventInput" name="activityEvent" class="submissionField" required></textarea>
                     </div>
                     <input type="submit">
                 </form>
+            </div>
+            <div id="activityReportTab" class="tab">
+
             </div>
             <div id="behaviourReportTab" class="tab">
                 <!-- Behavioral Incident Report Form -->
                 <h5 class="text-info">This report is to be a factual account of behavioral incidents that occur.
                 Be factual and objective in your writing when filing this form.</h5>
-                <form>
+                <form id="behaviourForm" action="submitReport.php" method="post">
+                    <div class="form-group">
+                        <input class="form-control" type="hidden" name="formType" value="behaviourReport">
+                    </div>
                     <div class="form-group clientList">
                         <!--TODO: Populate with client names-->
                         An error has occurred
@@ -241,6 +271,7 @@ echo('<script>const clientRadHtml = \'' . $htmlString . ' \';</script>');
         //Create client radio menus
         console.error("feg");
         $('.clientList').html(clientRadHtml);
+        $('.activityCode').html(activityCodeRadHtml);
 
         //Code segment for tab links
         $('.tablinks').on('click', function(e) {
