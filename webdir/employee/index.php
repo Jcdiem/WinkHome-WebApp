@@ -188,8 +188,7 @@ echo('<script>const activityCodeRadHtml = \'' . $activityHtmlString . ' \';</scr
 <!--            TODO: Load in from a schedule -->
             </div>
             <div id="dailyReportTab" class="tab">
-<!--                -->
-                <!--         Client activity log           -->
+                <!--         Client daily report           -->
                 <form id="dailyReportForm" action="submitReport.php" method="post">
                     <div class="form-group">
                         <input class="form-control" type="hidden" name="formType" value="dailyReport">
@@ -198,19 +197,39 @@ echo('<script>const activityCodeRadHtml = \'' . $activityHtmlString . ' \';</scr
                         An error has occurred - client list not populated
                     </div>
                     <div class="form-group">
-                        <label for="activityDateInput">Date:  </label>
-                        <input required type="date" id="activityDateInput" name="activityDate">
+                        <label for="dreportDateInput">Date:  </label>
+                        <input required type="date" id="dreportDateInput" name="dreportDate">
                     </div>
                     <div class="form-group">
-                        <label for="activityEventInput">What did the client do? (Key notes of day)</label>
+                        <label for="dreportEventInput">What did the client do? (Key notes of day)</label>
                         <br>
-                        <textarea id="activityEventInput" name="activityEvent" class="submissionField" required></textarea>
+                        <textarea id="dreportEventInput" name="dreportEvent" class="submissionField" required></textarea>
                     </div>
                     <input type="submit">
                 </form>
             </div>
             <div id="activityReportTab" class="tab">
-
+                <!--         Client activity log           -->
+                <form id="activityForm" method="post" action="submitReport.php">
+                    <div class="form-group"> 
+                        <input class="form-control" type="hidden" name="formType" value="activity">
+                    </div>
+                    <div class="form-group clientList">
+                        An error has occurred - client list not populated
+                    </div>
+                    <div class="form-group activityCode">
+                        An error has occurred - activity list list not populated
+                    </div>
+                    <div class="form-group">
+                        <label for="activityDateInput">Date:  </label>
+                        <input required type="date" id="activityDateInput" name="activityDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="activityLocationInput">Location: </label>
+                        <input id="activityLocationInput" name="activityLocation" required>
+                    </div>
+                    <input type="submit" class="btn-info btn-lg">
+                </form>
             </div>
             <div id="behaviourReportTab" class="tab">
                 <!-- Behavioral Incident Report Form -->

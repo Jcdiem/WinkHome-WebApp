@@ -19,13 +19,23 @@ if(isset($_REQUEST['formType'])){
             }
             else{
                 if (!($stmnt = $mysqli->prepare('INSERT INTO DailyLogs(description, dateTime, signingEmployee, regardingClient) VALUES(?, ?, (SELECT staffID from staff where last LIKE ? AND INSTR(first,?)),(SELECT clientID from client where clientID=?));'))) echo "Prepare failed";//: (" . $mysqli->errno . ") " . $mysqli->error;
-                if (!$stmnt->bind_param("ssssi", $_REQUEST['activityEvent'], $_REQUEST['activityDate'],$userName[1],$userName[0],$_REQUEST['clientRadio'])) echo "Binding parameters failed";//: (" . $stmnt->errno . ") " . $stmnt->error;
+                if (!$stmnt->bind_param("ssssi", $_REQUEST['dreportEvent'], $_REQUEST['dreportDate'],$userName[1],$userName[0],$_REQUEST['clientRadio'])) echo "Binding parameters failed";//: (" . $stmnt->errno . ") " . $stmnt->error;
                 if (!$stmnt->execute()) echo "Execute failed";// : (" . $stmnt->errno . ") " . $stmnt->error;
                 else $success = true;
             }
             break;
         case "activity":
-            echo "Activity report submit not implemented";
+            if(!is_numeric($_REQUEST['clientRadio'])) {
+                echo "Error in data format, client and staff ID should be numeric!";
+                exit(-1);
+            }
+            else{
+                if (!($stmnt = $mysqli->prepare('INSERT INTO activityReports(employee, client, activityType, date, location) VALUES((SELECT staffID from staff WHERE last LIKE ? AND INSTR(first, ?)), ?,?,?,?);'))) echo "Prepare failed";//: (" . $mysqli->errno . ") " . $mysqli->error;
+                if (!$stmnt->bind_param("ssiiss", $userName[1],$userName[0],$_REQUEST['clientRadio'],$_REQUEST['activityCodeRadio'],$_REQUEST['activityDate'],$_REQUEST['activityLocation'])) echo "Binding parameters failed";//: (" . $stmnt->errno . ") " . $stmnt->error;
+                if (!$stmnt->execute()) echo "Execute failed";// : (" . $stmnt->errno . ") " . $stmnt->error;
+                else $success = true;
+            }
+
             break;
         case "behaviourReport":
             echo "Behaviour report not yet implemented";
