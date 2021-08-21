@@ -32,6 +32,7 @@ try {
             margin: auto;
         }
     </style>
+    <script>failPassword = false;</script>
 </head>
 <?php
 
@@ -66,8 +67,8 @@ if(isset($_REQUEST['user']) && isset($_REQUEST['pass'])){
         
     // This is what happens when the username and/or password doesn't match
     } else {
-        unset($_SESSION['csrf_token']);
-        echo "<p>Incorrect username OR password</p>";
+//        unset($_SESSION['csrf_token']);
+        echo "<script>failPassword = true;</script>";
     }
 }
 
@@ -109,6 +110,11 @@ if(isset($_SESSION['user'])) { ?>
         <input type="submit" class="btn btn-primary" value="Log In"/>
     </form>
 </div>
+<script>
+    $(document).ready(function() {
+        $('.invalidServerVal').css('display: block');
+    });
+</script>
 </body>
 </html>
 <?php } ?>
