@@ -38,7 +38,31 @@ if(isset($_REQUEST['formType'])){
 
             break;
         case "behaviourReport":
-            echo "Behaviour report not yet implemented";
+            if(!(isset($_REQUEST['damagesInput'])) || !(isset($_REQUEST['reflectInput'])) || !(isset($_REQUEST['damagesInput'])) || !(isset($_REQUEST['notesInput']))  || !(isset($_REQUEST['incidentInput'])) || !(isset($_REQUEST['precipInput'])) || !(isset($_REQUEST['clientRadio'])) || !(isset($_REQUEST['date']))){
+                echo "All required fields not filled!";
+            }
+            else{
+                if(!is_numeric($_REQUEST['clientRadio'])) {
+                    echo "Error in data format, client and staff ID should be numeric!";
+                    exit(-1);
+                }
+                else{
+                    if(isset($_REQUEST['witnessInput'])){
+                        if (!($stmnt = $mysqli->prepare('INSERT INTO behaviourIncidentReports (regardingClient, dateTime, signingEmployee, precipitatingFactors, incidentDescription, followupNotes, selfReflection, damages, witnesses) VALUES (?,?,(SELECT staffID from staff WHERE last LIKE ? AND INSTR(first, ?)),?,?,?,?,?,?)'))) echo "Prepare failed";//: (" . $mysqli->errno . ") " . $mysqli->error;
+                        if (!$stmnt->bind_param("isssssssss", $_REQUEST['clientRadio'],$_REQUEST['date'],$userName[1],$userName[0],$_REQUEST['precipInput'],$_REQUEST['incidentInput'],$_REQUEST['notesInput'],$_REQUEST['reflectInput'],$_REQUEST['damagesInput'],$_REQUEST['witnessInput'])) echo "Binding parameters failed";//: (" . $stmnt->errno . ") " . $stmnt->error;
+                        if (!$stmnt->execute()) echo "Execute failed";// : (" . $stmnt->errno . ") " . $stmnt->error;
+                        else $success = true;
+                    }
+                    else{
+                        if (!($stmnt = $mysqli->prepare('INSERT INTO behaviourIncidentReports (regardingClient, dateTime, signingEmployee, precipitatingFactors, incidentDescription, followupNotes, selfReflection, damages) VALUES (?,?,(SELECT staffID from staff WHERE last LIKE ? AND INSTR(first, ?)),?,?,?,?,?)'))) echo "Prepare failed";//: (" . $mysqli->errno . ") " . $mysqli->error;
+                        if (!$stmnt->bind_param("isssssssss", $_REQUEST['clientRadio'],$_REQUEST['date'],$userName[1],$userName[0],$_REQUEST['precipInput'],$_REQUEST['incidentInput'],$_REQUEST['notesInput'],$_REQUEST['reflectInput'],$_REQUEST['damagesInput'])) echo "Binding parameters failed";//: (" . $stmnt->errno . ") " . $stmnt->error;
+                        if (!$stmnt->execute()) echo "Execute failed";// : (" . $stmnt->errno . ") " . $stmnt->error;
+                        else $success = true;
+                    }
+                }
+            }
+
+
             break;
         default:
             echo "Error: unknown form type submitted!";

@@ -237,42 +237,46 @@ echo('<script>const activityCodeRadHtml = \'' . $activityHtmlString . ' \';</scr
                 Be factual and objective in your writing when filing this form.</h5>
                 <form id="behaviourForm" action="submitReport.php" method="post">
                     <div class="form-group">
-                        <input class="form-control" type="hidden" name="formType" value="behaviourReport">
+                        <input required class="form-control" type="hidden" name="formType" value="behaviourReport">
+                    </div>
+                    <div class="form-group">
+                        <label for="brDateInput">Date:  </label>
+                        <input required type="date" id="brDateInput" name="date">
                     </div>
                     <div class="form-group clientList">
                         <!--TODO: Populate with client names-->
                         An error has occurred
                     </div>
                     <div class="form-group">
-                        <label for="precipInput">Precipitating Factors: </label>
+                        <label for="brPrecipInput">Precipitating Factors: </label>
                         <br>
-                        <textarea id="precipInput" class="submissionField"></textarea>
+                        <textarea required id="brPrecipInput" name="precipInput" class="submissionField"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="incidentInput">Details of Behavioral Incident: </label>
+                        <label for="brIncidentInput">Details of Behavioral Incident: </label>
                         <br>
                         <p style="font-size: 0.75rem">Please include details of what intervention was used, and how the client responded.</p>
-                        <textarea id="precipInput" class="submissionField"></textarea>
+                        <textarea required id="brIncidentInput" name="incidentInput" class="submissionField"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="notesInput">Details From Follow-Up Meeting</label>
+                        <label for="brNotesInput">Details From Follow-Up Meeting</label>
                         <br>
-                        <textarea id="notesInput" class="submissionField"></textarea>
+                        <textarea required id="brNotesInput" name="notesInput" class="submissionField"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="reflectInput">How will this change assisting the client? (Self Reflection)</label>
+                        <label for="brReflectInput">How will this change assisting the client? (Self Reflection)</label>
                         <br>
-                        <textarea id="reflectInput" class="submissionField"></textarea>
+                        <textarea required id="brReflectInput" name="reflectInput" class="submissionField"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="damagesInput">Physical Injuries and Damages: </label>
+                        <label for="brDamagesInput">Physical Injuries and Damages: </label>
                         <br>
-                        <textarea id="damagesInput" class="submissionField"></textarea>
+                        <textarea required id="brDamagesInput" name="damagesInput" class="submissionField"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="witnessInput">Witnesses</label>
+                        <label for="brWitnessInput">Witnesses</label>
                         <br>
-                        <input type="text" id="witnessInput" placeholder="John Doe, Jane Doe, etc...">
+                        <input type="text" id="brWitnessInput" name="witnessInput" placeholder="John Doe, Jane Doe, etc...">
                     </div>
                     <p class="text-danger">By submitting this form, you are entering your above text as an official statement tied to your name.</p>
                     <input type="submit">
