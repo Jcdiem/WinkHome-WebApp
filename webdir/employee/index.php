@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/employee/force_login.php";
-require_once $_SERVER['DOCUMENT_ROOT'] . "/employee/db.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/employee/db.php"; /** @var $mysqli */
 
 function debug_to_console($data) {
     $output = $data;
@@ -10,8 +10,15 @@ function debug_to_console($data) {
     echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
 }
 
+function simpleMySQL($mysqlStrIn,$mysqli){
+    if (!($stmnt = $mysqli->prepare($mysqlStrIn))) {
+        echo "Prepare failed";//: (" . $mysqli->errno . ") " . $mysqli->error;
+    }
+    if (!$stmnt->execute()) echo "Execute failed";// : (" . $stmnt->errno . ") " . $stmnt->error;
+    if (!$result = $stmnt->get_result()) echo "Gathering result failed"; //: (" . $stmnt->errno . ") " . $stmnt->error;
+    return $result;
+}
 
-/** @var $mysqli */
 
 //Gather whether the user is an admin
 //TODO: Implement modifiable schedules
@@ -24,12 +31,21 @@ if (!$result = $stmnt->get_result()) echo "Gathering result failed"; //: (" . $s
 $row = mysqli_fetch_assoc($result);
 $isAdmin = $row['isAdmin'];
 
-// Create the radio menu for client selection
-if (!($stmnt = $mysqli->prepare('SELECT * FROM client ORDER BY last'))) {
-    echo "Prepare failed";//: (" . $mysqli->errno . ") " . $mysqli->error;
+//Only load these mySQL if the user is an admin
+if($isAdmin == true){
+    //Create client lists
+    $result = simpleMySQL('SELECT clientID, first, last FROM client',$mysqli);
+    $clientTableHTML = '<thead class="thead-light"><tr><th scope="col">ID</th><th scope="col">First</th><th scope="col">Last</th></tr></thead><tbody>';
+    while($row = $result->fetch_assoc()){
+        $clientTableHTML .= '<tr><th scope="row">' . $row['clientID'] . '</th><td>' . $row['first'] . '</td><td>' . $row['last'] . '</td></tr>';
+    }
+    $clientTableHTML .= '</tbody>';
+
+    echo('<script>const clientTableHTML = \'' . $clientTableHTML . ' \';</script>');
 }
-if (!$stmnt->execute()) echo "Execute failed";// : (" . $stmnt->errno . ") " . $stmnt->error;
-if (!$result = $stmnt->get_result()) echo "Gathering result failed"; //: (" . $stmnt->errno . ") " . $stmnt->error;
+
+// Create the radio menu for client selection
+$result = simpleMySQL('SELECT * FROM client ORDER BY last',$mysqli);
 $clientHtmlString = "<p><b>Pick a client</b></p>";
 for ($i = 0; $i < $result->num_rows; $i++) {
     if (!$row = $result->fetch_assoc()) {
@@ -42,11 +58,7 @@ for ($i = 0; $i < $result->num_rows; $i++) {
 }
 
 //Create the radio menu for activity type
-if (!($stmnt = $mysqli->prepare('SELECT * FROM activityCode'))) {
-    echo "Prepare failed";//: (" . $mysqli->errno . ") " . $mysqli->error;
-}
-if (!$stmnt->execute()) echo "Execute failed";// : (" . $stmnt->errno . ") " . $stmnt->error;
-if (!$result = $stmnt->get_result()) echo "Gathering result failed"; //: (" . $stmnt->errno . ") " . $stmnt->error;
+$result = simpleMySQL('SELECT * FROM activityCode',$mysqli);
 $activityHtmlString = "<p><b>Activity type</b></p>";
 for ($i = 0; $i < $result->num_rows; $i++) {
     if (!$row = $result->fetch_assoc()) {
@@ -133,7 +145,6 @@ echo('<script>const activityCodeRadHtml = \'' . $activityHtmlString . ' \';</scr
     </style>
 </head>
 <body>
-<?= print_r($isAdmin,true)?>
 <nav class="navbar navbar-dark fixed-top bg-primary flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Employee Dashboard</a>
     <ul class="navbar-nav px-3">
@@ -173,12 +184,6 @@ echo('<script>const activityCodeRadHtml = \'' . $activityHtmlString . ' \';</scr
                     </li>
                     <?php if($isAdmin == true){?>
                         <li class="nav-item">
-                            <a class="nav-link tablinks" href="#scheduleTab">
-                                <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z" clip-rule="evenodd"/></svg>
-                                Schedule Management
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link tablinks" href="#clientTab">
                                 <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z" clip-rule="evenodd"/></svg>
                                 Client Management
@@ -196,14 +201,23 @@ echo('<script>const activityCodeRadHtml = \'' . $activityHtmlString . ' \';</scr
         </div>
         <main role="main" class="tab-content col-md-9 ml-sm-auto col-lg-10 px-4">
             <?php if($isAdmin == true){?>
-                <div id="scheduleTab" class="tab">
-                    Schedule tab
-                </div>
                 <div id="clientTab" class="tab">
-                    client tab
+                    <div id="clientTabSchedule">
+                        <h1>Client Schedules</h1>
+                    </div>
+                    <div id="clientTabEditing">
+                        <h1>Client Editing</h1>
+                    </div>
+                    <div id="clientTabClients">
+                        <h1>Clients</h1>
+                        <table class="clientTable table">
+
+                        </table>
+                    </div>
                 </div>
                 <div id="staffTab" class="tab">
-                    Staff tab
+                    <h1>Staff List</h1>
+                    <h1>Staff Editing</h1>
                 </div>
             <?php } ?>
             <div id="dailyNeedsTab" class="tab active">
@@ -288,7 +302,6 @@ echo('<script>const activityCodeRadHtml = \'' . $activityHtmlString . ' \';</scr
                         <input required type="date" id="brDateInput" name="date">
                     </div>
                     <div class="form-group clientList">
-                        <!--TODO: Populate with client names-->
                         An error has occurred
                     </div>
                     <div class="form-group">
@@ -333,9 +346,11 @@ echo('<script>const activityCodeRadHtml = \'' . $activityHtmlString . ' \';</scr
 <script>
     $(document).ready(function() {
 
+        <?php if($isAdmin == true) { ?>
+        $('.clientTable').html(clientTableHTML);
+        <?php } ?>
 
         //Create client radio menus
-        console.error("feg");
         $('.clientList').html(clientRadHtml);
         $('.activityCode').html(activityCodeRadHtml);
 
