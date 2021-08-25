@@ -28,7 +28,7 @@ try {
             margin: auto;
         }
         .btn-primary {
-            text-align: center;
+            display: flex;
             margin: auto;
         }
     </style>
@@ -63,6 +63,7 @@ if(isset($_REQUEST['user']) && isset($_REQUEST['pass'])){
         session_start();
     
         $_SESSION['user'] = $firstName . "." . $lastName;
+        $_SESSION['staffID'] = $row['staffID'];
     
         
     // This is what happens when the username and/or password doesn't match
