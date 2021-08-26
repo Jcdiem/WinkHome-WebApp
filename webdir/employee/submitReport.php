@@ -9,6 +9,18 @@ if(isset($_REQUEST['formType'])){
     $success = false;
 
     switch($_REQUEST['formType']){
+        case "addClient":
+            print_r($_REQUEST);
+            if(!(isset($_REQUEST['clientFirst'])) || !(isset($_REQUEST['clientLast']))){
+                echo "All required fields not filled!";
+            }
+            else {
+                if (!($stmnt = $mysqli->prepare('INSERT INTO client (first, last) VALUES (?,?)'))) echo "Prepare failed";//: (" . $mysqli->errno . ") " . $mysqli->error;
+                if (!$stmnt->bind_param("ss", $_REQUEST['clientFirst'],$_REQUEST['clientLast'])) echo "Binding parameters failed";//: (" . $stmnt->errno . ") " . $stmnt->error;
+                if (!$stmnt->execute()) echo "Execute failed";// : (" . $stmnt->errno . ") " . $stmnt->error;
+                else $success = true;
+            }
+            break;
         case "dailyNeeds":
             echo "Daily needs submit not implemented.";
             break;

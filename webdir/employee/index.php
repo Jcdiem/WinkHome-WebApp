@@ -103,6 +103,9 @@ echo('<script>const activityCodeRadHtml = \'' . $activityHtmlString . ' \';</scr
             cursor: pointer;
             outline: inherit;
         }
+        .form-group{
+            padding-left: 1rem;
+        }
         .sidebar {
             position: fixed;
             left: 0;
@@ -202,16 +205,30 @@ echo('<script>const activityCodeRadHtml = \'' . $activityHtmlString . ' \';</scr
         <main role="main" class="tab-content col-md-9 ml-sm-auto col-lg-10 px-4">
             <?php if($isAdmin == true){?>
                 <div id="clientTab" class="tab">
-                    <div id="clientTabSchedule">
-                        <h1>Client Schedules</h1>
-                    </div>
-                    <div id="clientTabEditing">
+                    <div id="clientTab">
                         <h1>Client Editing</h1>
+                        <h2>Add Client</h2>
+                        <div id="clientTabAdd" style="border-top: 1px solid black;">
+                            <form id="clientAddForm" action="submitReport.php" method="post">
+                                <div class="form-group">
+                                    <input class="form-control" type="hidden" name="formType" value="addClient">
+                                    <div class="form-group">
+                                        <label for="addClientFirst">First Name:</label>
+                                        <input type="text" id="addClientFirst" name="clientFirst">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="addClientLast">Last Name:</label>
+                                        <input type="text" name="clientLast" id="addClientLast">
+                                    </div>
+                                    <input type="submit">
+                                </div>
+                            </form>
+                        </div>
+                        <h2>Edit Client</h2>
                     </div>
                     <div id="clientTabClients">
                         <h1>Clients</h1>
                         <table class="clientTable table">
-
                         </table>
                     </div>
                 </div>
